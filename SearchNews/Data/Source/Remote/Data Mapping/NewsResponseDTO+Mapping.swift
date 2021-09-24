@@ -20,7 +20,7 @@ struct ArticleDTO: Codable {
     let author, title, articleDescription: String
     let url: String
     let urlToImage: String
-    let publishedAt: Date
+    let publishedAt: String
     let content: String
 
     enum CodingKeys: String, CodingKey {
@@ -54,7 +54,7 @@ extension ArticleDTO {
                      articleDescription: articleDescription,
                      url: url,
                      urlToImage: urlToImage,
-                     publishedAt: publishedAt.formattedDate(),
+                     publishedAt: publishedAt,
                      content: content)
     }
 }
@@ -76,3 +76,4 @@ extension Date {
         return dateString
     }
 }
+ 

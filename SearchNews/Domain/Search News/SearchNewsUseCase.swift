@@ -29,7 +29,7 @@ final class DefaultSearchNewsUseCase: SearchNewsUseCase {
             switch result {
                 case .success(let responseDTO):
                     // return with fetched news
-                    completion(.success(responseDTO.toDomain()))
+                    completion(.success(responseDTO.toDomain(page: requestValue.page)))
                 case .failure(let error):
                     // return with error
                     completion(.failure(error))

@@ -27,8 +27,9 @@ class SearchNewsViewModel: SearchNewsViewModelInput {
     private(set) var pages: [NewsModel] = []
     private(set) var searchKeyword = ""
     private(set) var totalArticles = 1
+    private(set) var pageSize = 20
     private(set) var currentPage = 0
-    var hasMorePages: Bool { currentPage < totalArticles }
+    var hasMorePages: Bool { (currentPage * pageSize) < totalArticles }
     var nextPage: Int { hasMorePages ? currentPage + 1 : currentPage }
      
     private(set) var articlesCellsViewModel:[NewsListItemViewModel] = [] {
@@ -55,6 +56,7 @@ class SearchNewsViewModel: SearchNewsViewModelInput {
     //MARK:- Private
     private func appendPage(_ page: NewsModel) {
         totalArticles = page.totalResults
+        currentPage = page.page
         
         pages = pages
             .filter { $0.page != page.page }
@@ -88,6 +90,7 @@ class SearchNewsViewModel: SearchNewsViewModelInput {
     
     func update(newsQuery: NewsQuery) {
         resetPages()
+        self.searchKeyword = newsQuery.query
         load(newsQuery: newsQuery, loading: .fullScreen)
     }
 }

@@ -15,7 +15,7 @@ class URLSessionNetworkService: NetworkService {
    
     func getNews(request: NewsRequestDTO, completion: @escaping (Result<NewsResponseDTO, Error>) -> Void) {
         
-        let urlString = Constants.serverURl + "q=\(request.search)&page=\(request.page)&api_key=\(Constants.apiKey)"
+        let urlString = Constants.serverURl + "q=\(request.search)&page=\(request.page)&apiKey=\(Constants.apiKey)"
         guard let urlEncodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed), let url = URL(string: urlEncodedString) else {
             print("Wrong URL!: \(urlString)")
             return
@@ -40,8 +40,10 @@ class URLSessionNetworkService: NetworkService {
                 // parse json data to model items
                 let response = try JSONDecoder().decode(NewsResponseDTO.self, from: data)
                 completion(.success(response))
-            } catch {
-                completion(.failure(error))
+            } catch (let err) {
+                print(urlString)
+                print(err.localizedDescription)
+                completion(.failure(err))
             }
         }
         

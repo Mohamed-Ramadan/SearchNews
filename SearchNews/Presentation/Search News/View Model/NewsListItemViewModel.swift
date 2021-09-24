@@ -10,12 +10,14 @@ import Foundation
 struct NewsListItemViewModel: Equatable {
     var title: String = ""
     var subTitle: String = ""
+    var imageURL: String = ""
 }
 
 extension NewsListItemViewModel {
     init(article: Article) {
         self.title = article.title
-        self.subTitle = article.articleDescription
+        self.subTitle = article.author
+        self.imageURL = article.urlToImage
     }
 }
 
