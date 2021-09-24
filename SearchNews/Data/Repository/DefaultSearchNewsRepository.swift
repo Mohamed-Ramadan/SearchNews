@@ -26,7 +26,7 @@ class DefaultSearchNewsRepository: SearchNewsRepository {
         // fetch cached news
         localStorage?.getResponse(for: requestDTO, completion: { result in
             if case let .success(responseDTO?) = result {
-                cached(responseDTO.toDomain())
+                cached(responseDTO.toDomain(page: page))
             }
         })
          

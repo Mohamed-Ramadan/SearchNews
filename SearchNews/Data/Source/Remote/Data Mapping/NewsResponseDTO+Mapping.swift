@@ -38,9 +38,10 @@ struct SourceDTO: Codable {
 
 //MARK: Mapping To Domain
 extension NewsResponseDTO {
-    func toDomain() -> NewsModel {
+    func toDomain(page: Int) -> NewsModel {
         return .init(status: status,
                      totalResults: totalResults,
+                     page: page,
                      articles: articles.map {$0.toDomain()})
     }
 }
