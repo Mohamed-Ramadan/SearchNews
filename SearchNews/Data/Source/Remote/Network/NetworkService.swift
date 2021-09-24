@@ -39,11 +39,10 @@ class URLSessionNetworkService: NetworkService {
             do {
                 // parse json data to model items
                 let response = try JSONDecoder().decode(NewsResponseDTO.self, from: data)
+                
                 completion(.success(response))
-            } catch (let err) {
-                print(urlString)
-                print(err.localizedDescription)
-                completion(.failure(err))
+            } catch let error { 
+                completion(.failure(error))
             }
         }
         

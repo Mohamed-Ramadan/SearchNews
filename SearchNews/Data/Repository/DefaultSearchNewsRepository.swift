@@ -36,11 +36,16 @@ class DefaultSearchNewsRepository: SearchNewsRepository {
             
             switch result {
                 case .success(let responseDTO):
-                    // Cache fetched news page
-                    self.localStorage?.save(response: responseDTO, for: requestDTO)
-                    
-                    // return with fetched news
-                    completion(.success(responseDTO))
+                    if responseDTO.status == "error", let message = responseDTO.message {
+                        let error = NSError(domain: message, code: 401, userInfo: nil)
+                        completion(.failure(error))
+                    } else {
+                        // Cache fetched news page
+                        self.localStorage?.save(response: responseDTO, for: requestDTO)
+                        
+                        // return with fetched news
+                        completion(.success(responseDTO))
+                    }
                 case .failure(let error):
                     completion(.failure(error))
             }

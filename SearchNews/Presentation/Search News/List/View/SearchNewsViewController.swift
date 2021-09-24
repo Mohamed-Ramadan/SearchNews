@@ -18,6 +18,7 @@ class SearchNewsViewController: UIViewController {
     var nextPageLoadingSpinner: UIActivityIndicatorView?
     var fullPageLoadingSpinner: UIActivityIndicatorView?
     var viewModel: SearchNewsViewModel!
+    var timer: Timer?
     
     private lazy var searchNewsUseCase: SearchNewsUseCase = {
         let newsResponseStorage: NewsResponseStorage = DefaultNewsResponseStorage()
@@ -115,7 +116,11 @@ class SearchNewsViewController: UIViewController {
      
     @objc func textFieldDidChange(textField: UITextField) {
         if let text = textField.text {
-            self.viewModel.update(newsQuery: .init(query: text))
+            timer?.invalidate()  // Cancel any previous timer
+            
+            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { timer in
+                self.viewModel.update(newsQuery: .init(query: text))
+            })
         }
     }
     

@@ -10,8 +10,9 @@ import Foundation
 // MARK: - NewsResponseDTO
 struct NewsResponseDTO: Codable {
     let status: String
-    let totalResults: Int
-    let articles: [ArticleDTO]
+    let message: String?
+    let totalResults: Int?
+    let articles: [ArticleDTO]?
 }
 
 // MARK: - Article
@@ -40,9 +41,9 @@ struct SourceDTO: Codable {
 extension NewsResponseDTO {
     func toDomain(page: Int) -> NewsModel {
         return .init(status: status,
-                     totalResults: totalResults,
+                     totalResults: totalResults ?? 0,
                      page: page,
-                     articles: articles.map {$0.toDomain()})
+                     articles: articles?.map {$0.toDomain()} ?? [])
     }
 }
 
