@@ -81,6 +81,7 @@ class SearchNewsViewController: UIViewController {
             fullPageLoadingSpinner?.removeFromSuperview()
             fullPageLoadingSpinner = self.makeActivityIndicator(size: .init(width: self.view.frame.width, height: 44))
             self.view.addSubview(fullPageLoadingSpinner!)
+            fullPageLoadingSpinner?.center = self.view.center
             fullPageLoadingSpinner?.startAnimating()
         } else {
             fullPageLoadingSpinner?.removeFromSuperview()
@@ -111,7 +112,7 @@ class SearchNewsViewController: UIViewController {
         self.newsTableView.separatorStyle = .none
         
     }
-    
+     
     @objc func textFieldDidChange(textField: UITextField) {
         if let text = textField.text {
             self.viewModel.update(newsQuery: .init(query: text))
@@ -128,7 +129,7 @@ class SearchNewsViewController: UIViewController {
 
 extension SearchNewsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.articlesCellsViewModel.count
+        return self.viewModel.pages.articles.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -137,8 +138,7 @@ extension SearchNewsViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         cell.selectionStyle = .none
-        cell.configureCellWithArticle(self.viewModel.articlesCellsViewModel[indexPath.row])
-        
+        cell.configureCellWithArticle(self.viewModel.getViewModel(for: indexPath.row))
         return cell
     }
     
@@ -147,11 +147,13 @@ extension SearchNewsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        _ = self.viewModel.didSelectItem(at: indexPath.row)
+        let detailsVC =  ArticleDetailsViewController(nibName :ArticleDetailsViewController.identifier,bundle : nil)
+        detailsVC.article = self.viewModel.getViewModel(for: indexPath.row)
+        self.navigationController?.pushViewController(detailsVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == self.viewModel.articlesCellsViewModel.count-2 {
+        if indexPath.row == self.viewModel.pages.articles.count-2 {
             self.viewModel.didLoadNextPage()
         }
     }

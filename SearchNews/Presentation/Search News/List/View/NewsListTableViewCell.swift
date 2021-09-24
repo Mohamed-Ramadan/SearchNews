@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class NewsListTableViewCell: UITableViewCell {
 
@@ -39,6 +40,7 @@ class NewsListTableViewCell: UITableViewCell {
     
     func configureCellWithArticle(_ articleViewModel: NewsListItemViewModel) {
         titleLabel.text = articleViewModel.title
-        subTitleLabel.text = articleViewModel.subTitle
+        subTitleLabel.text = articleViewModel.description
+        articleImageView.kf.setImage(with: URL(string: articleViewModel.imageURL))
     }
 }

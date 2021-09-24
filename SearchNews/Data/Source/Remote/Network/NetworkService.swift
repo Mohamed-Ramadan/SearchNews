@@ -12,7 +12,7 @@ protocol NetworkService {
 }
 
 class URLSessionNetworkService: NetworkService {
-   
+     
     func getNews(request: NewsRequestDTO, completion: @escaping (Result<NewsResponseDTO, Error>) -> Void) {
         
         let urlString = Constants.serverURl + "q=\(request.search)&page=\(request.page)&apiKey=\(Constants.apiKey)"

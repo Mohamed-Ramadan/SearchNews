@@ -24,7 +24,11 @@ protocol SearchNewsViewModelInput {
 class SearchNewsViewModel: SearchNewsViewModelInput {
     
     private(set) var newsUseCase: SearchNewsUseCase
-    private(set) var pages: [NewsModel] = []
+    var pages: [NewsModel] = [] {
+        didSet{
+            self.articlesCompletionHandler()
+        }
+    }
     private(set) var searchKeyword = ""
     private(set) var totalArticles = 1
     private(set) var pageSize = 20
@@ -32,12 +36,6 @@ class SearchNewsViewModel: SearchNewsViewModelInput {
     var hasMorePages: Bool { (currentPage * pageSize) < totalArticles }
     var nextPage: Int { hasMorePages ? currentPage + 1 : currentPage }
      
-    private(set) var articlesCellsViewModel:[NewsListItemViewModel] = [] {
-        didSet{
-            self.articlesCompletionHandler()
-        }
-    }
-    
     private(set) var loading: SearchNewsViewModelLoading = .none {
         didSet {
             self.loadingCompletionHandler(loading)
@@ -61,8 +59,6 @@ class SearchNewsViewModel: SearchNewsViewModelInput {
         pages = pages
             .filter { $0.page != page.page }
             + [page]
-
-        articlesCellsViewModel = pages.articles.map(NewsListItemViewModel.init)
     }
      
     private func load(newsQuery: NewsQuery, loading: SearchNewsViewModelLoading) {
@@ -92,6 +88,10 @@ class SearchNewsViewModel: SearchNewsViewModelInput {
         resetPages()
         self.searchKeyword = newsQuery.query
         load(newsQuery: newsQuery, loading: .fullScreen)
+    }
+    
+    func getViewModel(for index: Int) -> NewsListItemViewModel {
+        return NewsListItemViewModel.init(article: self.pages.articles[index])
     }
 }
 
@@ -123,7 +123,7 @@ extension SearchNewsViewModel {
 
 // MARK: - Private
 
-private extension Array where Element == NewsModel {
+extension Array where Element == NewsModel {
     var articles: [Article] { flatMap { $0.articles } }
 }
 
