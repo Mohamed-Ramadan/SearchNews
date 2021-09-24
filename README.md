@@ -17,6 +17,7 @@
 
     ### To Do:
         - Unit Tests 
+        - Cache new using Core Data
      
 
 ## How to run this project:
